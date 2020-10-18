@@ -18,5 +18,24 @@ Many popular *denoising* techniques exist nowadays, but *image smoothening* duri
 ## Expected Results
 
 ## Project Timeline
++ 19 Oct - 25 Oct:
+    + Read and understand the given paper and all related papers
+    + Set up the environment: Install all necessary libraries
++ 26 Oct - 30 Oct:
+    + Use author’s set of images to run our code
+    + Implement a basic denoising code
++ **Mid Evaluation: 31 October**
++ 01 Nov - 05 Nov: 
+    + Further improve the denoising code
+    + Implement a script to compare the similarity of 2 images
++ 06 Nov - 10 Nov:
+    + Compare results of our code with other denoising methods
+    + Compare results of our code with results from the paper
+    + Do the above 2 steps for our own dataset of images
++ 11 Nov - 18 Nov: 
+    + Perform a final set of tests and compare results. Make any improvements if needed
+    + Prepare Presentation
+    + Reserve time: To incorporate for delays
++ **Final Evaluation: 19-25 Nov**
 
 
