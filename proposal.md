@@ -13,7 +13,14 @@ A common problem encountered during image acquisition is of **noise** creeping i
 
 Many popular *denoising* techniques exist nowadays, but *image smoothening* during denoising is still a problem. Each denoising method has its pros and cons. We can use a combination of denoising techniques to denoise the image, and it needs to be adapted to different types of noise in the image.
 
-## Project Goals  
+## Main goal(s) of the project
++ Make modules to add artificial noise to images (Gaussian, Poisson, salt-and-pepper, speckle, random suppression, multi, etc.)
++ Code classical algorithms to denoise images (Gaussian filter, Median filter, Bilateral filter, non-local means, TV-Chambolle, Richardson-Lucy deconvolution, inpainting, etc.)
++ Use COBRA module and implement an image denoising algorithm.
++ Implement feature extraction from images.
++ Code to evaluate the denoising quality i.e. implement loss functions like Root Mean Squared Error (RMSE), Peak Signal-to-Noise Ratio (PSNR).
++ Training and optimizing the parameters.
++ Gather images for the dataset.
 
 ## Expected Results
 COBRA denoising method enhances the performance of the preliminary filters. We will use an aggregation of multiple filters, which allows us to take advantage of the abilities of all the individual filters which in turn, can adapt better to unknown noise levels. As our final result, we will demonstrate that such a non-linear aggregation of filters significantly outperform each of the individual filters. 
@@ -40,3 +47,5 @@ COBRA denoising method enhances the performance of the preliminary filters. We w
 + **Final Evaluation: 19-25 Nov**
 
 
+## Is there a dataset you need ? How do you plan to get it?
+We need a set of 25 images for training. The authors of the paper have provided a set of images. However, if time permits, as an additional challenge we plan to create a database by accumulating suitable images from the internet and see how our algorithm performs with a new set of training images.
