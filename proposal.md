@@ -16,6 +16,7 @@ Many popular *denoising* techniques exist nowadays, but *image smoothening* duri
 ## Project Goals  
 
 ## Expected Results
+COBRA denoising method enhances the performance of the preliminary filters. We will use an aggregation of multiple filters, which allows us to take advantage of the abilities of all the individual filters which in turn, can adapt better to unknown noise levels. As our final result, we will demonstrate that such a non-linear aggregation of filters significantly outperform each of the individual filters. 
 
 ## Project Timeline
 + 19 Oct - 25 Oct:
