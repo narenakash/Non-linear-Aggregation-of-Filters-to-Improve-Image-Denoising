@@ -111,9 +111,18 @@ class Noise:
         self.img = noisy
         return self
 
-    def patchSupression(self):
-        return self
+    def patchSupression(self, patch_nb = 1, patch_size = 1):
+        """
+        Suppress random patch from the original image
+        """
+        noisy = np.copy(self.img)
+        for i in range(patch_nb):
+            x = np.random.randint(0, self.img.shape[0] - patch_size)
+            y = np.random.randint(0, self.img.shape[1] - patch_size)
+            noisy[x:x + patch_size,y:y + patch_size] = 1
 
+        self.img = noisy
+        return self
 
     def copy(self):
         """
