@@ -88,6 +88,26 @@ class Noise:
         return self
       
     def poisson(self):
+        """
+        Adds poisson noise to the image
+        """
+        # determine unique values in image and calculate the next power of two
+        vals = len(np.unique(self.img))
+        vals = 2 ** np.ceil(np.log2(vals))
+
+        # ensure image is exclusively positive
+        if self.img.min() < 0:
+            old_max = self.img.max()
+            self.img = (self.img + 1.0) / (old_max + 1.0)
+
+        # generating noise for each unique value in the image
+        noisy = np.random.poisson(self.img * vals) / float(vals)
+
+        # return image to original range if input was signed
+        if self.img.min() < 0:
+            noisy = noisy * (old_max + 1.0) - 1
+
+        self.img = noisy
         return self
 
     def patchSupression(self):
