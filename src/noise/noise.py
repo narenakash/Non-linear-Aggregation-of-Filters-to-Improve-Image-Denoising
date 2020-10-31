@@ -85,6 +85,7 @@ class Noise:
         """
         noise = np.random.normal(mean, var**0.5, self.img.shape)
         noisy = self.img + self.img * noise
+        self.img = noisy
         return self
       
     def poisson(self):
