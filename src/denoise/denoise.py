@@ -39,15 +39,19 @@ class Denoise:
         return self
 
     def gaussian(self, k=(5,5)):
-        self.img = cv2.GaussianBlur(img, k, 0) 
+        self.img = cv2.GaussianBlur(self.img, k, 0) 
 
         return self
 
     def bilateral(self, k = 9, s1 = 75, s2 = 75):
-        self.img = cv2.bilateralFilter(img, k, s1, s2)
+        self.img = cv2.bilateralFilter(self.img, k, s1, s2)
 
         return self
 
+    def NLmeans(self, h = 10, hc = 10, tws = 7, sws = 21):
+        self.img = cv.fastNlMeansDenoisingColored(self.img, None, h, hc, tws ,sws) 
+
+        return self
 
      def copy(self):
         """
