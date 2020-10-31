@@ -79,7 +79,12 @@ class Noise:
         self.img = noisy
         return self
 
-    def speckle(self):
+    def speckle(self, var=0.1, mean=0.0):
+        """
+        Adds speckle noise to the image
+        """
+        noise = np.random.normal(mean, var**0.5, self.img.shape)
+        noisy = self.img + self.img * noise
         return self
       
     def poisson(self):
@@ -89,7 +94,7 @@ class Noise:
         return self
 
 
-     def copy(self):
+    def copy(self):
         """
         Returns a copy of this
         """
