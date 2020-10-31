@@ -4,6 +4,7 @@ import os
 
 import numpy as np
 import cv2
+import skimage.restoration
 
 from .errors import ImageNotFoundError, InvalidImageError
 
@@ -50,6 +51,27 @@ class Denoise:
 
     def NLmeans(self, h = 10, hc = 10, tws = 7, sws = 21):
         self.img = cv.fastNlMeansDenoisingColored(self.img, None, h, hc, tws ,sws) 
+
+        return self
+
+    def TVchambolle(self):
+        self.img = skimage.restoration.denoise_tv_chambolle(self.img, multichannel=True)
+
+        return self
+
+    def richardson_lucy(self, point_spread_rl = 5):
+        psf = np.ones((point_spread_rl, point_spread_rl)) / point_spread_rl**2
+        result = np.zeros(self.img.shape)
+        result[:,:,0] =  skimage.restoration.richardson_lucy(self.img[:,:,0], psf, point_spread_rl)
+        result[:,:,1] =  skimage.restoration.richardson_lucy(self.img[:,:,1], psf, point_spread_rl)
+        result[:,:,2] =  skimage.restoration.richardson_lucy(self.img[:,:,2], psf, point_spread_rl)
+        self.img = result
+
+        return self
+
+    def inpaint(self):
+        mask = (self.img.mean(axis=2) == 1)
+        self.img = skimage.restoration.inpaint.inpaint_biharmonic(self.img, mask, multichannel=True)
 
         return self
 
