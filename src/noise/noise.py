@@ -5,7 +5,7 @@ import os
 import numpy as np
 import cv2
 
-from .errors import ImageNotFoundError, InvalidImageError
+# from .errors import ImageNotFoundError, InvalidImageError
 
 
 class Noise:
@@ -71,12 +71,12 @@ class Noise:
         """
         Adds gaussian noise to the image
         """
-        h, w, c = self.img.shape
         sigma = var**0.5
         gauss = np.random.normal(mean,sigma,self.img.shape)
-        gauss = gauss.reshape(self.img.shape)
-        noisy = self.img + gauss
-        self.img = noisy
+        gauss = gauss.reshape(self.img.shape).astype(np.uint8)
+        self.img = cv2.add(self.img, gauss)
+
+        self.edits.append(f"gaussian:{var}")
         return self
 
     def speckle(self, var=0.1, mean=0.0):
@@ -86,6 +86,7 @@ class Noise:
         noise = np.random.normal(mean, var**0.5, self.img.shape)
         noisy = self.img + self.img * noise
         self.img = noisy
+        self.edits.append(f"speckle:{var}")
         return self
       
     def poisson(self):
@@ -109,9 +110,10 @@ class Noise:
             noisy = noisy * (old_max + 1.0) - 1
 
         self.img = noisy
+        self.edits.append(f"poisson")
         return self
 
-    def patchSupression(self, patch_nb = 1, patch_size = 1):
+    def patchSupression(self, patch_nb = 5, patch_size = 20):
         """
         Suppress random patch from the original image
         """
@@ -122,6 +124,7 @@ class Noise:
             noisy[x:x + patch_size,y:y + patch_size] = 1
 
         self.img = noisy
+        self.edits.append(f"patchsup")
         return self
 
     def copy(self):
@@ -146,4 +149,7 @@ class Noise:
 
 
 if __name__ == "__main__":
-    Noise("./inp.jpg").salt().pepper().write()
+    Noise("./nin.png").salt().pepper().write()
+    Noise("./nin.png").patchSupression().write()
+    Noise("./nin.png").gaussian().write()
+    Noise("./nin.png").speckle().write()
