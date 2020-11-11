@@ -65,6 +65,9 @@ class Denoise:
         result[:,:,0] =  skimage.restoration.richardson_lucy(self.img[:,:,0], psf, point_spread_rl)
         result[:,:,1] =  skimage.restoration.richardson_lucy(self.img[:,:,1], psf, point_spread_rl)
         result[:,:,2] =  skimage.restoration.richardson_lucy(self.img[:,:,2], psf, point_spread_rl)
+        result *= 255
+        result = np.rint(result)
+        result = result.astype('uint8')
         self.img = result
 
         return self
