@@ -6,7 +6,13 @@ import numpy as np
 import cv2
 import skimage.restoration
 
-from .errors import ImageNotFoundError, InvalidImageError
+# from .errors import ImageNotFoundError, InvalidImageError
+
+def denoiseMethods():
+    dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle',\
+            'richardsonLucy', 'inpaint']
+
+    return dm
 
 
 class Denoise:
@@ -16,7 +22,7 @@ class Denoise:
 
     def __init__(self, img):
         self.img = img
-        self.ext = "jpg"
+        self.ext = ".jpg"
 
     @staticmethod
     def imread(img_path):
@@ -34,6 +40,12 @@ class Denoise:
 
         return img
 
+    def denoiseNAME(self, img, method):
+        getattr(self, method, 'img', img)
+
+        return self.img
+        
+
     def median(self, k=5):
         self.img = cv2.medianBlur(self.img, k)
 
@@ -50,7 +62,7 @@ class Denoise:
         return self
 
     def NLmeans(self, h = 10, hc = 10, tws = 7, sws = 21):
-        self.img = cv.fastNlMeansDenoisingColored(self.img, None, h, hc, tws ,sws) 
+        self.img = cv2.fastNlMeansDenoisingColored(self.img, None, h, hc, tws ,sws) 
 
         return self
 
@@ -75,11 +87,14 @@ class Denoise:
 
         return self
 
-     def copy(self):
+    def copy(self):
         """
         Returns a copy of this
         """
         return deepcopy(self)
+
+    def returnImage(self):
+        return self.img
 
     def write(self, name=None, ext=None, directory=None):
         """
@@ -95,4 +110,8 @@ class Denoise:
 
 
 if __name__ == "__main__":
-    Denoise(img).median().write(name="file1")
+    img = cv2.imread('./nin_speckle:0.1_.png')
+    Denoise(img).median().write(name="median")
+    Denoise(img).richardson_lucy().write(name="rl")
+    Denoise(img).TVchambolle().write(name="tv")
+    Denoise(img).NLmeans().write(name="NLm")
