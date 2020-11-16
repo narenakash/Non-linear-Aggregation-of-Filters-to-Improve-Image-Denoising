@@ -93,9 +93,11 @@ class Noise:
         """
         Adds poisson noise to the image
         """
-        noisy = np.random.poisson(self.img / 255.0 * maxv) / maxv * 255  
+        # noisy = np.random.poisson(self.img / 255.0 * maxv) / maxv * 255  
 
-        self.img = noisy.astype(np.uint8)
+        # self.img = noisy.astype(np.uint8)
+        rng = np.random.default_rng(None)
+        self.img = rng.poisson(self.img)
         self.edits.append(f"poisson")
         return self
 
