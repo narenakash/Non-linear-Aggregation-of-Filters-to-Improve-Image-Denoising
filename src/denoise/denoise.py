@@ -8,21 +8,22 @@ import skimage.restoration
 
 # from .errors import ImageNotFoundError, InvalidImageError
 
-def denoiseMethods():
-    dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle',\
-            'richardsonLucy', 'inpaint']
-
-    return dm
-
-
 class Denoise:
     """
     To add noise to an image image
     """
 
     def __init__(self, img):
-        self.img = img
+        self.img = img.astype('uint8')
         self.ext = ".jpg"
+        self.medianImg = np.empty(self.img.shape)
+        self.gaussianImg = np.empty(self.img.shape)
+        self.bilateralImg = np.empty(self.img.shape)
+        self.NLmeansImg = np.empty(self.img.shape)
+        self.TVchambolleImg = np.empty(self.img.shape)
+        self.richardsonLucyImg = np.empty(self.img.shape)
+        self.inpaintImg = np.empty(self.img.shape)
+        self.allNoises = []
 
     @staticmethod
     def imread(img_path):
@@ -44,51 +45,62 @@ class Denoise:
         getattr(self, method, 'img', img)
 
         return self.img
-        
+
+    def denoiseMethods(self):
+        dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle', 
+              'richardsonLucy', 'inpaint']
+
+        return dm        
 
     def median(self, k=5):
-        self.img = cv2.medianBlur(self.img, k)
+        self.medianImg = cv2.medianBlur(self.img, k)
 
-        return self
+        return self.medianImg
 
     def gaussian(self, k=(5,5)):
-        self.img = cv2.GaussianBlur(self.img, k, 0) 
+        self.gaussianImg = cv2.GaussianBlur(self.img, k, 0) 
 
-        return self
+        return self.gaussianImg
 
     def bilateral(self, k = 9, s1 = 75, s2 = 75):
-        self.img = cv2.bilateralFilter(self.img, k, s1, s2)
+        self.bilateralImg = cv2.bilateralFilter(self.img, k, s1, s2)
 
-        return self
+        return self.bilateralImg
 
-    def NLmeans(self, h = 10, hc = 10, tws = 7, sws = 21):
-        self.img = cv2.fastNlMeansDenoisingColored(self.img, None, h, hc, tws ,sws) 
+    def NLmeans(self, h = 10, tws = 7, sws = 21):
+        self.NLmeansImg = cv2.fastNlMeansDenoising(self.img, None, h, tws ,sws) 
 
-        return self
+        return self.NLmeansImg
 
     def TVchambolle(self):
-        self.img = skimage.restoration.denoise_tv_chambolle(self.img, multichannel=True)
+        self.TVchambolleImg = skimage.restoration.denoise_tv_chambolle(self.img, multichannel=True)
 
-        return self
+        return self.TVchambolleImg
 
     def richardson_lucy(self, point_spread_rl = 5):
         psf = np.ones((point_spread_rl, point_spread_rl)) / point_spread_rl**2
         result = np.zeros(self.img.shape)
-        result[:,:,0] =  skimage.restoration.richardson_lucy(self.img[:,:,0], psf, point_spread_rl)
-        result[:,:,1] =  skimage.restoration.richardson_lucy(self.img[:,:,1], psf, point_spread_rl)
-        result[:,:,2] =  skimage.restoration.richardson_lucy(self.img[:,:,2], psf, point_spread_rl)
-        result *= 255
-        result = np.rint(result)
-        result = result.astype('uint8')
-        self.img = result
+        result =  skimage.restoration.richardson_lucy(self.img, psf, point_spread_rl)
+        self.richardson_lucyImg = result
 
-        return self
+        return self.richardson_lucyImg
 
     def inpaint(self):
-        mask = (self.img.mean(axis=2) == 1)
-        self.img = skimage.restoration.inpaint.inpaint_biharmonic(self.img, mask, multichannel=True)
+        mask = (self.img == 1)
+        self.inpaintImg = skimage.restoration.inpaint.inpaint_biharmonic(self.img, mask, multichannel=False)
 
-        return self
+        return self.inpaintImg
+
+    def getAllNoises(self):
+        self.allNoises = []
+        self.allNoises.append(self.median())
+        self.allNoises.append(self.gaussian())
+        self.allNoises.append(self.bilateral())
+        self.allNoises.append(self.NLmeans())
+        self.allNoises.append(self.TVchambolle())
+        self.allNoises.append(self.richardson_lucy())
+        self.allNoises.append(self.inpaint())
+        return self.allNoises
 
     def copy(self):
         """
@@ -110,7 +122,6 @@ class Denoise:
             ext = self.ext
 
         return cv2.imwrite(name + ext, self.img)
-
 
 if __name__ == "__main__":
     img = cv2.imread('./nin_speckle:0.1_.png')
