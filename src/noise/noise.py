@@ -89,27 +89,13 @@ class Noise:
         self.edits.append(f"speckle:{var}")
         return self
       
-    def poisson(self):
+    def poisson(self, maxv = 0.2):
         """
         Adds poisson noise to the image
         """
-        # determine unique values in image and calculate the next power of two
-        vals = len(np.unique(self.img))
-        vals = 2 ** np.ceil(np.log2(vals))
+        noisy = np.random.poisson(self.img / 255.0 * maxv) / maxv * 255  
 
-        # ensure image is exclusively positive
-        if self.img.min() < 0:
-            old_max = self.img.max()
-            self.img = (self.img + 1.0) / (old_max + 1.0)
-
-        # generating noise for each unique value in the image
-        noisy = np.random.poisson(self.img * vals) / float(vals)
-
-        # return image to original range if input was signed
-        if self.img.min() < 0:
-            noisy = noisy * (old_max + 1.0) - 1
-
-        self.img = noisy
+        self.img = noisy.astype(np.uint8)
         self.edits.append(f"poisson")
         return self
 
@@ -149,7 +135,8 @@ class Noise:
 
 
 if __name__ == "__main__":
-    Noise("./nin.png").salt().pepper().write()
-    Noise("./nin.png").patchSupression().write()
-    Noise("./nin.png").gaussian().write()
-    Noise("./nin.png").speckle().write()
+    # Noise("./nin.png").salt().pepper().write()
+    # Noise("./nin.png").patchSupression().write()
+    # Noise("./nin.png").gaussian().write()
+    # Noise("./nin.png").speckle().write()
+    Noise("./Aaron_Eckhart_0001.jpg").poisson().write()
