@@ -8,6 +8,12 @@ import skimage.restoration
 
 # from .errors import ImageNotFoundError, InvalidImageError
 
+def denoiseMethods():
+    dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle',\
+            'richardsonLucy', 'inpaint']
+
+    return dm
+
 class Denoise:
     """
     To add noise to an image image
@@ -42,15 +48,7 @@ class Denoise:
         return img
 
     def denoiseNAME(self, img, method):
-        getattr(self, method, 'img', img)
-
-        return self.img
-
-    def denoiseMethods(self):
-        dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle', 
-              'richardsonLucy', 'inpaint']
-
-        return dm        
+        return getattr(self, method, 'img', img)
 
     def median(self, k=5):
         self.medianImg = cv2.medianBlur(self.img, k)
