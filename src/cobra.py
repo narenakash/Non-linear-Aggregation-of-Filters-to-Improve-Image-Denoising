@@ -41,3 +41,21 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
         print("Predictions:," cobra.machine_predictions_)
 
     return cobra, alpha, epsilon
+
+def cobraDenoise(noisy, model, n_of_machines, p_size=1) :
+    print("Image denoising...")
+    testX = []
+    for x in range(p_size, noise_class.originalImg.shape[0]-p_size):
+      for y in range(p_size,noise_class.originalImg.shape[1]-p_size):
+        testX.append(getNeighbours(noisy, x, y, p_size))
+
+    Y = model.predict(testX, n_of_machines)
+    # Padding image
+    if p_size:
+      Ytmp = noisy.copy()
+      for x in range(p_size, noise_class.originalImg.shape[0]-p_size) :
+        for y in range(p_size,noise_class.originalImg.shape[1]-p_size) : 
+          Ytmp[x, y] = (noise_class.originalImg.shape[1]-2*p_size) * Y[(x - p_size)+(y - p_size)]
+
+      Y = Ytmp.reshape(-1)
+    return Y
