@@ -24,6 +24,13 @@ class denoiseEvaluation :
         self.euclidianDist = np.linalg.norm(self.img1 - self.img2)
         return self.euclidianDist
 
+    def getRMSE(self):
+        """
+        Computes RMSE
+        """
+        self.RMSE = np.sqrt(((self.img1 - self.img2) ** 2).mean())
+        return self.RMSE
+
 def getNeighbours(I, x, y, k):
     """
     load and reshape the training data 
