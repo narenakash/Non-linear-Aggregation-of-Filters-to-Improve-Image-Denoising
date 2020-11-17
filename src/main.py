@@ -1,9 +1,9 @@
 import numpy as np
-from .helper import *
+from helper import *
 from cobra import *
 from cobramachine import *
-from .noise import *
-from .denoise import *
+from noise import *
+from denoise import *
 
 if __name__ == "__main__":
     command = "ls train"
