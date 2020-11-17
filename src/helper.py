@@ -9,6 +9,14 @@ class denoiseEvaluation :
         self.euclidianDist = 0
         self.RMSE = 0
 
+    def getPSNR(self, peak=255):
+        """
+        Computes PSNR
+        """
+        x = (np.array(self.img1).squeeze() - np.array(self.img2).squeeze()).flatten()
+        self.PSNR = np.log10(peak**2 / np.mean(x**2)) * 10
+        return self.PSNR
+
 def getNeighbours(I, x, y, k):
     """
     load and reshape the training data 
