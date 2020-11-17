@@ -8,12 +8,6 @@ import skimage.restoration
 
 # from .errors import ImageNotFoundError, InvalidImageError
 
-def denoiseMethods():
-    dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle',\
-            'richardsonLucy', 'inpaint']
-
-    return dm
-
 class Denoise:
     """
     To add noise to an image image
@@ -47,8 +41,14 @@ class Denoise:
 
         return img
 
-    def denoiseNAME(self, img, method):
-        return getattr(self, method, 'img', img)
+    def denoiseNAME(self, method):
+        return getattr(method, 'img', self.img)
+
+    def denoiseMethods(self):
+        dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle', 
+              'richardson_lucy', 'inpaint']
+
+        return dm        
 
     def median(self, k=5):
         self.medianImg = cv2.medianBlur(self.img, k)
@@ -76,10 +76,8 @@ class Denoise:
         return self.TVchambolleImg
 
     def richardson_lucy(self, point_spread_rl = 5):
-        psf = np.ones((point_spread_rl, point_spread_rl)) / point_spread_rl**2
-        result = np.zeros(self.img.shape)
-        result =  skimage.restoration.richardson_lucy(self.img, psf, point_spread_rl)
-        self.richardson_lucyImg = result
+        psf = np.ones((point_spread_rl, point_spread_rl)) / point_spread_rl ** 2
+        self.richardson_lucyImg = skimage.restoration.richardson_lucy(img_as_float(self.img), psf, point_spread_rl)
 
         return self.richardson_lucyImg
 

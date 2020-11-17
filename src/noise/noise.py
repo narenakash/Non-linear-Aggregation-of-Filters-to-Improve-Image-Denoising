@@ -108,14 +108,11 @@ class Noise:
         """
         Adds poisson noise to the image
         """
-        # noisy = np.random.poisson(self.img / 255.0 * maxv) / maxv * 255  
-
-        # self.img = noisy.astype(np.uint8)
-        rng = np.random.default_rng(None)
-        self.poissonImg = rng.poisson(self.img)
-        # noisy = (np.random.poisson(self.originalImg / 255.0 * maxv) / maxv * 255).astype('uint8')
-        # self.poissonImg = noisy.astype(np.uint8)
-        self.edits.append(f"poisson")
+        poissonNoise = np.random.poisson(self.originalImg).astype(float)
+        self.poissonImg = self.originalImg.astype('float') + poissonNoise
+        self.poissonImg /= self.poissonImg.max()
+        self.poissonImg *= 255
+        self.poissonImg = np.rint(self.poissonImg).astype('uint8')
         return self.poissonImg
 
     def patchSupression(self, patch_nb = 5, patch_size = 2):
