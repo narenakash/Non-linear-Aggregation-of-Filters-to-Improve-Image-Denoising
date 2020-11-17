@@ -33,3 +33,18 @@ if __name__ == "__main__":
         cnt += 1
 
     plt.savefig("1.png")
+
+    denoise_class = Denoise(noise_class.multiNoiseImg)
+    denoise_class.getAllNoises()
+
+    denoisedImgs = [denoise_class.img] + denoise_class.allNoises
+    denoisedLabels = ['Original'] + denoise_class.denoiseMethods()
+    cnt = 0
+    f, axarr = plt.subplots(2, 4, figsize=(20,10))
+    for i in range(2):
+      for j in range(4):
+        axarr[i][j].imshow(denoisedImgs[cnt], cmap='gray')
+        axarr[i][j].title.set_text(denoisedLabels[cnt])
+        cnt += 1
+
+    plt.savefig("2.png")    
