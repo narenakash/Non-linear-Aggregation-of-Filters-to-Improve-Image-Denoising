@@ -17,3 +17,19 @@ if __name__ == "__main__":
     file_name = 'test/' + file_name[0]
 
     print("Number of train images = " + str(len(train_names)))
+
+    noise_class = Noise(file_name)
+    noise_class.multiNoise()
+    noise_class.getAllNoises()
+
+    noisyImgs = [noise_class.originalImg] + noise_class.allNoises
+    noisyLabels = ['Original'] + noise_class.noiseMethods()
+    cnt = 0
+    f, axarr = plt.subplots(2, 4, figsize=(20,10))
+    for i in range(2):
+      for j in range(4):
+        axarr[i][j].imshow(noisyImgs[cnt], cmap='gray')
+        axarr[i][j].title.set_text(noisyLabels[cnt])
+        cnt += 1
+
+    plt.savefig("1.png")
