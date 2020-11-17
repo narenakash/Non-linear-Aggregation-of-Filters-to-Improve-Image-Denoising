@@ -1,5 +1,14 @@
 import numpy as np
 
+class denoiseEvaluation :
+    def __init__(self, img1, img2):
+        self.img1 = img1.copy()
+        self.img2 = img2.copy()
+        
+        self.PSNR = 0
+        self.euclidianDist = 0
+        self.RMSE = 0
+
 def getNeighbours(I, x, y, k):
     """
     load and reshape the training data 
