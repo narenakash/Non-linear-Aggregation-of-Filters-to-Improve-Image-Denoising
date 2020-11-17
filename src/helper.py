@@ -17,6 +17,13 @@ class denoiseEvaluation :
         self.PSNR = np.log10(peak**2 / np.mean(x**2)) * 10
         return self.PSNR
 
+    def euclidianDistance(self):
+        """
+        Compute euclidian distance
+        """
+        self.euclidianDist = np.linalg.norm(self.img1 - self.img2)
+        return self.euclidianDist
+
 def getNeighbours(I, x, y, k):
     """
     load and reshape the training data 
