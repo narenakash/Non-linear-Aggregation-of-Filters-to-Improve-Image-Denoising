@@ -1,1 +1,1 @@
-from .denoise import Denoise
+from .denoise import Denoise, denoiseMethods
