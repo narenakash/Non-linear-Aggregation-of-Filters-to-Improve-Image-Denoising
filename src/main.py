@@ -47,4 +47,21 @@ if __name__ == "__main__":
         axarr[i][j].title.set_text(denoisedLabels[cnt])
         cnt += 1
 
-    plt.savefig("2.png")    
+    plt.savefig("2.png")
+
+    training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
+    patch = 1
+    noisy = noisyImgs[-1]
+    model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patch_size=patch, optimise=False, verb=False)
+    Y = cobraDenoise(noisy, model, alpha, p_size=patch)
+    im_denoise = np.array(Y).reshape(noisy.shape)
+    
+
+    print('Display of the cobra denoising result')
+    plt.imshow(im_denoise, cmap = plt.get_cmap('gray'))
+    plt.savefig("3.png")
+    print("Evaluation...")
+    evaluate = denoiseEvaluation(im_denoise, noise_class.originalImg)
+    evaluate.evaluateAll()
+    print("Displaying the difference between denoised image and original one...")
+    plt.imshow(evaluate.Idiff, cmap = plt.get_cmap('gray'))
