@@ -31,6 +31,16 @@ class denoiseEvaluation :
         self.RMSE = np.sqrt(((self.img1 - self.img2) ** 2).mean())
         return self.RMSE
 
+    def evaluateAll(self):
+        self.euclidianDistance()
+        self.getPSNR()
+        self.getRMSE()
+        print("Euclidian distance = ", self.euclidianDist)
+        print("PSNR = ", self.PSNR)
+        print("RMSE = ", self.RMSE)
+        print('---------------------------------------------')
+        return
+
 def getNeighbours(I, x, y, k):
     """
     load and reshape the training data 
