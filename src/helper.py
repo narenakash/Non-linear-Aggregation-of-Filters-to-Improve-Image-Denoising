@@ -47,3 +47,31 @@ def getNeighbours(I, x, y, k):
     """
     assert(0 <= x - k and x + k < I.shape[0] and 0 <= y - k and y + k < I.shape[1])
     return I[x - k:x + k + 1, y - k:y + k + 1].flatten()
+
+def loadTrainingData(train_names, totNoises, k=0):
+    trainingData  = []
+    trainingData1 = []
+    trainingData2 = []
+    testingData  = []
+    for f in train_names :
+        noiseClass = Noise(f)
+        noisyImgs = noiseClass.getAllNoises()
+        for i in totNoises:
+            sigma = 0.1
+            epsilon = np.random.normal(0, sigma, noiseClass.originalImg.shape)
+
+            testingData += [[noiseClass.originalImg[i1, i2]] for i1 in range(k, noiseClass.originalImg.shape[0] - k) for i2 in range(k, noiseClass.originalImg.shape[1] - k)]
+            noisyImg = noisyImgs[i]
+
+            v1 = noisyImg + sigma * epsilon
+            v1 = (v1.min() - v1) / (v1.min() - v1.max())
+            v2 = noisyImg - sigma * epsilon
+            v2 = (v2.min() - v2) / (v2.min() - v2.max())
+            
+            for x in range(k,noiseClass.originalImg.shape[0]-k):
+              for y in range(k,noiseClass.originalImg.shape[1]-k):
+                trainingData1 += [getNeighbours(v1, x, y, k)]
+                trainingData2 += [getNeighbours(v2, x, y, k)]
+                trainingData += [getNeighbours(noisyImg, x, y, k)]
+
+    return (trainingData, trainingData1, trainingData2, testingData
