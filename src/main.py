@@ -61,7 +61,7 @@ if __name__ == "__main__":
     plt.clf()
 
     training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
-    patch = 31
+    patch = 1
     noisy = noisyImgs[-1]
     loadModel = False
     model  = None
