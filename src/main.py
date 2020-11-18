@@ -6,19 +6,17 @@ from noise import *
 from denoise import *
 import subprocess
 import matplotlib.pyplot as plt
+import os
 
 if __name__ == "__main__":
-    command = "ls ../dataset/train"
-    train_names = subprocess.check_output(command, shell=True).decode('utf-8').split('\n')
-    train_names.pop()
-    train_names = [ '../dataset/train/' + name for name in train_names ]
 
-    command = "ls ../dataset/test"
-    file_name = subprocess.check_output(command, shell=True).decode('utf-8').split('\n')
-    file_name.pop()
-    file_name = '../dataset/test/' + file_name[0]
-
+    train_path = '../dataset/train/'
+    train_names=[train_path+i for i in os.listdir(train_path)]
     print("Number of train images = " + str(len(train_names)))
+
+    file_path = '../dataset/test/'
+    file_names=[file_path+i for i in os.listdir(file_path)]
+    file_name=file_names[0]
 
     noise_class = Noise(file_name)
     noise_class.multiNoise()
@@ -34,7 +32,7 @@ if __name__ == "__main__":
         axarr[i][j].title.set_text(noisyLabels[cnt])
         cnt += 1
 
-    plt.savefig("1.png")
+    plt.savefig("./results/1:Input.png")
     plt.cla()
     plt.clf()
 
@@ -51,7 +49,7 @@ if __name__ == "__main__":
         axarr[i][j].title.set_text(denoisedLabels[cnt])
         cnt += 1
 
-    plt.savefig("2.png")
+    plt.savefig("./results/2:MultiNoise-Output.png")
     plt.cla()
     plt.clf()
 
@@ -65,7 +63,7 @@ if __name__ == "__main__":
 
     print('Display of the cobra denoising result')
     plt.imshow(im_denoise, cmap = plt.get_cmap('gray'))
-    plt.savefig("3.png")
+    plt.savefig("./results/3:Cobra-Output.png")
     plt.cla()
     plt.clf()
 
@@ -74,6 +72,6 @@ if __name__ == "__main__":
     evaluate.evaluateAll()
     print("Saving the difference between denoised image and original one...")
     plt.imshow(evaluate.Idiff, cmap = plt.get_cmap('gray'))
-    plt.savefig("4.png")
+    plt.savefig("./results/4:Difference.png")
     plt.cla()
     plt.clf()
