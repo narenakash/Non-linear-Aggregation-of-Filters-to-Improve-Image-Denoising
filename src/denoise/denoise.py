@@ -86,6 +86,8 @@ class Denoise:
     def richardson_lucy(self, point_spread_rl = 5):
         psf = np.ones((point_spread_rl, point_spread_rl)) / point_spread_rl ** 2
         self.richardson_lucyImg = skimage.restoration.richardson_lucy(img_as_float(self.img), psf, point_spread_rl)
+        self.richardson_lucyImg = self.richardson_lucyImg*255
+        self.richardson_lucyImg = self.richardson_lucyImg(np.uint8)
 
         return self.richardson_lucyImg
 
@@ -128,9 +130,10 @@ class Denoise:
         return cv2.imwrite(name + ext, self.img)
 
 if __name__ == "__main__":
-    img = cv2.imread('../../dataset/test/Aaron_Eckhart_0001.jpg')
+    img = cv2.imread('k.jpg',0)
+    print(img.shape)
     x = Denoise(img)
-    ret = x.denoiseNAME('bilateral')
+    ret = x.denoiseNAME('richardson_lucy')
     print(ret.shape)
     # Denoise(img).median().write(name="median")
     # Denoise(img).richardson_lucy().write(name="rl")
