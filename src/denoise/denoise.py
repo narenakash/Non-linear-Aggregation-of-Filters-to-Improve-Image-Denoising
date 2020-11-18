@@ -87,7 +87,7 @@ class Denoise:
         psf = np.ones((point_spread_rl, point_spread_rl)) / point_spread_rl ** 2
         self.richardson_lucyImg = skimage.restoration.richardson_lucy(img_as_float(self.img), psf, point_spread_rl)
         self.richardson_lucyImg = self.richardson_lucyImg*255
-        self.richardson_lucyImg = self.richardson_lucyImg(np.uint8)
+        self.richardson_lucyImg = self.richardson_lucyImg.astype('uint8')
 
         return self.richardson_lucyImg
 
