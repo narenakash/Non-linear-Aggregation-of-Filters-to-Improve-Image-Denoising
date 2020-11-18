@@ -4,17 +4,19 @@ from cobra import *
 from cobramachine import *
 from noise import *
 from denoise import *
+import subprocess
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    command = "ls train"
+    command = "ls ../dataset/train"
     train_names = subprocess.check_output(command, shell=True).decode('utf-8').split('\n')
     train_names.pop()
-    train_names = [ 'train/' + name for name in train_names ]
+    train_names = [ '../dataset/train/' + name for name in train_names ]
 
-    command = "ls test"
+    command = "ls ../dataset/test"
     file_name = subprocess.check_output(command, shell=True).decode('utf-8').split('\n')
     file_name.pop()
-    file_name = 'test/' + file_name[0]
+    file_name = '../dataset/test/' + file_name[0]
 
     print("Number of train images = " + str(len(train_names)))
 
@@ -50,10 +52,10 @@ if __name__ == "__main__":
     plt.savefig("2.png")
 
     training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
-    patch = 1
+    patch = 32
     noisy = noisyImgs[-1]
-    model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patch_size=patch, optimise=False, verb=False)
-    Y = cobraDenoise(noisy, model, alpha, p_size=patch)
+    model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=False)
+    Y = cobraDenoise(noisy, model,noise_class, alpha, patchSize=patch)
     im_denoise = np.array(Y).reshape(noisy.shape)
     
 

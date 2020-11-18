@@ -1,4 +1,5 @@
 import numpy as np
+from noise import *
 
 class denoiseEvaluation :
     def __init__(self, img1, img2):
@@ -74,4 +75,4 @@ def loadTrainingData(train_names, totNoises, k=0):
                 trainingData2 += [getNeighbours(v2, x, y, k)]
                 trainingData += [getNeighbours(noisyImg, x, y, k)]
 
-    return (trainingData, trainingData1, trainingData2, testingData
+    return (trainingData, trainingData1, trainingData2, testingData)

@@ -1,12 +1,19 @@
 from copy import deepcopy
 from random import randint, random
 import os
-
+from skimage import img_as_float
+import scipy.ndimage
 import numpy as np
 import cv2
 import skimage.restoration
 
 # from .errors import ImageNotFoundError, InvalidImageError
+
+def denoiseMethods():
+    dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle', 
+          'richardson_lucy', 'inpaint']
+
+    return dm
 
 class Denoise:
     """

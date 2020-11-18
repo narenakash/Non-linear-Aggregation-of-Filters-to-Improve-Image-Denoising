@@ -1,5 +1,5 @@
 # WIP 
-from .denoise import denoiseMethods, Denoise
+from denoise import denoiseMethods, Denoise
 
 class CobraMachine:
     def __init__(self, denoise, size):
@@ -10,11 +10,11 @@ class CobraMachine:
     def predict(self, img):
         self.denoisedIMG = []
 
+        dn = Denoise(img)
         for i in range(img.shape[0]):
-            dn = Denoise(img)
             ret = dn.denoiseNAME(self.denoise)
             
-            if size:
+            if 0 < self.size < min(ret.shape[0], ret.shape[1]):
                 self.denoisedIMG.append([ret[self.size,self.size]])
             else:
                 self.denoisedIMG.append([ret])

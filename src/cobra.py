@@ -1,6 +1,10 @@
 import numpy as np
-from .denoise import denoiseMethods
-from .helper import *
+from denoise.denoise import denoiseMethods
+from helper import *
+from pycobra.cobra import Cobra
+from pycobra.diagnostics import Diagnostics
+from pycobra.visualisation import Visualisation
+from cobramachine import *
 
 def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
 
@@ -13,10 +17,10 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
     cobra.fit(trainingData, testingData)
 
     for i, denoise in enumerate(denoisemethods):
-        cobra.load_machine(denoise, CobraMachine(denoise, i, patchSize))
+        cobra.load_machine(denoise, CobraMachine(denoise, patchSize))
 
     cobra.load_machine_predictions()
-    print("Predictions:," cobra.machine_predictions_)
+    # print("Predictions:", cobra.machine_predictions_)
 
     if best:
 
@@ -38,18 +42,19 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
         for i, denoise in enumerate(denoisemethods):
             cobra.load_machine(denoise, CobraMachine(denoise, i, patchSize))
         cobra.load_machine_predictions()
-        print("Predictions:," cobra.machine_predictions_)
+        # print("Predictions:", cobra.machine_predictions_)
 
-    return cobra, alpha, epsilon
+    return cobra, machines, epsilon
 
-def cobraDenoise(noisy, model, n_of_machines, p_size=1) :
+def cobraDenoise(noisy, model,noise_class, n_of_machines, p_size=1) :
     print("Image denoising...")
     testX = []
     for x in range(p_size, noise_class.originalImg.shape[0]-p_size):
       for y in range(p_size,noise_class.originalImg.shape[1]-p_size):
         testX.append(getNeighbours(noisy, x, y, p_size))
-
+    print("Dolty")
     Y = model.predict(testX, n_of_machines)
+    print("Dolty2")
     # Padding image
     if p_size:
       Ytmp = noisy.copy()
