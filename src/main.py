@@ -5,8 +5,15 @@ from cobramachine import *
 from noise import *
 from denoise import *
 import subprocess
+import os, pickle, matplotlib
+matplotlib.use('pdf')
 import matplotlib.pyplot as plt
-import os
+
+class saveModel:
+    def __init__(self, model, alpha, eps):
+        self.model = model
+        self.alpha = alpha
+        self.eps = eps
 
 if __name__ == "__main__":
 
@@ -56,10 +63,24 @@ if __name__ == "__main__":
     training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
     patch = 31
     noisy = noisyImgs[-1]
-    model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=False)
+    loadModel = False
+    model  = None
+    alpha = 0
+    eps = 0
+    if loadModel:
+        with open('best.pkl', 'rb') as input:
+            model = pickle.load(input)
+            alpha = model.alpha
+            eps = model.eps
+            model = model.model
+    else:
+        model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=False)
+    tosave = saveModel(model, alpha, eps)
+    with open('best.pkl', 'wb') as output:
+        pickle.dump(tosave, output, pickle.HIGHEST_PROTOCOL)
+
     Y = cobraDenoise(noisy, model,noise_class, alpha, p_size=patch)
     im_denoise = np.array(Y).reshape(noisy.shape)
-    
 
     print('Display of the cobra denoising result')
     plt.imshow(im_denoise, cmap = plt.get_cmap('gray'))
