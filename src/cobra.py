@@ -30,10 +30,10 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
         cobra_diagnostics = Diagnostics(cobra, trainingData, testingData)
         print("epsilon")
         epsilon, _ = cobra_diagnostics.optimal_epsilon(
-            trainingData, testingData, line_points=100, info=True)
+            trainingData, testingData, line_points=100, info=False)
         print("machines")
         machines, _ = cobra_diagnostics.optimal_alpha(
-            trainingData, testingData, epsilon=Epsilon_opt, info=True)
+            trainingData, testingData, epsilon=Epsilon_opt, info=False)
 
         cobra = Cobra(epsilon=epsilon, machines=machines)
         print("fit")
