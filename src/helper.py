@@ -94,10 +94,10 @@ def loadTrainingData(train_names, totNoises, k=0):
     # trainingData2=np.array(trainingData2).reshape(-1,1)
     # testingData=np.array(testingData).reshape(-1,1)
 
-    trainingData=np.array(trainingData)
-    trainingData1=np.array(trainingData1)
-    trainingData2=np.array(trainingData2)
-    testingData=np.array(testingData)
+    # trainingData=np.array(trainingData)
+    # trainingData1=np.array(trainingData1)
+    # trainingData2=np.array(trainingData2)
+    # testingData=np.array(testingData)
 
     print(trainingData.shape, trainingData1.shape, trainingData2.shape, testingData.shape)
     return (trainingData, trainingData1, trainingData2, testingData)
