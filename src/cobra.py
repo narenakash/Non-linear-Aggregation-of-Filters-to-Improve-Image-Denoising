@@ -26,13 +26,17 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
 
     if best:
 
+        print("Running Diagnostics")
         cobra_diagnostics = Diagnostics(cobra, trainingData, testingData)
+        print("epsilon")
         epsilon, _ = cobra_diagnostics.optimal_epsilon(
-            trainingData, testingData, line_points=100, info=False)
+            trainingData, testingData, line_points=100, info=True)
+        print("machines")
         machines, _ = cobra_diagnostics.optimal_alpha(
-            trainingData, testingData, epsilon=Epsilon_opt, info=False)
+            trainingData, testingData, epsilon=Epsilon_opt, info=True)
 
         cobra = Cobra(epsilon=epsilon, machines=machines)
+        print("fit")
         cobra.fit(
             trainingData,
             testingData,
@@ -62,7 +66,7 @@ def cobraDenoise(noisy, model,noise_class, n_of_machines, p_size=1):
       Ytmp = noisy.copy()
       for x in range(p_size, noise_class.originalImg.shape[0]-p_size) :
         for y in range(p_size,noise_class.originalImg.shape[1]-p_size) : 
-          Ytmp[x, y] = (noise_class.originalImg.shape[1]-2*p_size) * Y[(x - p_size)+(y - p_size)]
+          Ytmp[x,y] = Y[(x-p_size)*(noise_class.originalImg.shape[1]-2*p_size)+(y-p_size)]
 
       Y = Ytmp.reshape(-1)
     return Y

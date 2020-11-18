@@ -71,6 +71,7 @@ def loadTrainingData(train_names, totNoises, k=0):
         noiseClass = Noise(f)
         noisyImgs = noiseClass.getAllNoises()
         for i in totNoises:
+            print(i)
             sigma = 0.1
             epsilon = np.random.normal(0, sigma, noiseClass.originalImg.shape)
 
