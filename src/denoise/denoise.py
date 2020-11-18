@@ -92,7 +92,7 @@ class Denoise:
         return self.richardson_lucyImg
 
     def inpaint(self):
-        mask = (self.img == 1)
+        mask = (self.img == 255)
         self.inpaintImg = skimage.restoration.inpaint.inpaint_biharmonic(self.img, mask, multichannel=False)
 
         return self.inpaintImg
