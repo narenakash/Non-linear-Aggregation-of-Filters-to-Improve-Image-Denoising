@@ -9,6 +9,7 @@ class denoiseEvaluation :
         self.PSNR = 0
         self.euclidianDist = 0
         self.RMSE = 0
+        self.Idiff = self.img1-self.img2
 
     def getPSNR(self, peak=255):
         """
@@ -75,4 +76,15 @@ def loadTrainingData(train_names, totNoises, k=0):
                 trainingData2 += [getNeighbours(v2, x, y, k)]
                 trainingData += [getNeighbours(noisyImg, x, y, k)]
 
+    # trainingData=np.array(trainingData).reshape(-1,1)
+    # trainingData1=np.array(trainingData1).reshape(-1,1)
+    # trainingData2=np.array(trainingData2).reshape(-1,1)
+    # testingData=np.array(testingData).reshape(-1,1)
+
+    trainingData=np.array(trainingData)
+    trainingData1=np.array(trainingData1)
+    trainingData2=np.array(trainingData2)
+    testingData=np.array(testingData)
+
+    print(trainingData.shape, trainingData1.shape, trainingData2.shape, testingData.shape)
     return (trainingData, trainingData1, trainingData2, testingData)

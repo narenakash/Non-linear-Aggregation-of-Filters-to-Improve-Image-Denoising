@@ -35,6 +35,8 @@ if __name__ == "__main__":
         cnt += 1
 
     plt.savefig("1.png")
+    plt.cla()
+    plt.clf()
 
     denoise_class = Denoise(noise_class.multiNoiseImg)
     denoise_class.getAllNoises()
@@ -50,20 +52,28 @@ if __name__ == "__main__":
         cnt += 1
 
     plt.savefig("2.png")
+    plt.cla()
+    plt.clf()
 
     training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
-    patch = 32
+    patch = 31
     noisy = noisyImgs[-1]
     model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=False)
-    Y = cobraDenoise(noisy, model,noise_class, alpha, patchSize=patch)
+    Y = cobraDenoise(noisy, model,noise_class, alpha, p_size=patch)
     im_denoise = np.array(Y).reshape(noisy.shape)
     
 
     print('Display of the cobra denoising result')
     plt.imshow(im_denoise, cmap = plt.get_cmap('gray'))
     plt.savefig("3.png")
+    plt.cla()
+    plt.clf()
+
     print("Evaluation...")
     evaluate = denoiseEvaluation(im_denoise, noise_class.originalImg)
     evaluate.evaluateAll()
-    print("Displaying the difference between denoised image and original one...")
+    print("Saving the difference between denoised image and original one...")
     plt.imshow(evaluate.Idiff, cmap = plt.get_cmap('gray'))
+    plt.savefig("4.png")
+    plt.cla()
+    plt.clf()

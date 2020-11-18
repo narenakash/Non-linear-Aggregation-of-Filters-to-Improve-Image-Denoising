@@ -14,6 +14,7 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
     epsilon = 0.2
     machines = 4
     cobra = Cobra(epsilon=epsilon, machines=machines)
+
     cobra.fit(trainingData, testingData)
 
     for i, denoise in enumerate(denoisemethods):
@@ -46,7 +47,7 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
 
     return cobra, machines, epsilon
 
-def cobraDenoise(noisy, model,noise_class, n_of_machines, p_size=1) :
+def cobraDenoise(noisy, model,noise_class, n_of_machines, p_size=1):
     print("Image denoising...")
     testX = []
     for x in range(p_size, noise_class.originalImg.shape[0]-p_size):
