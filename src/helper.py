@@ -1,5 +1,7 @@
 import numpy as np
 from noise import *
+from skimage.metrics import structural_similarity as ssim
+
 
 class denoiseEvaluation :
     def __init__(self, img1, img2):
@@ -9,6 +11,7 @@ class denoiseEvaluation :
         self.PSNR = 0
         self.euclidianDist = 0
         self.RMSE = 0
+        self.SSIM= 0
         self.Idiff = self.img1-self.img2
 
     def getPSNR(self, peak=255):
@@ -33,13 +36,22 @@ class denoiseEvaluation :
         self.RMSE = np.sqrt(((self.img1 - self.img2) ** 2).mean())
         return self.RMSE
 
+    def getSSIM(self):
+        """
+        Computes SSIM
+        """        
+        self.SSIM = ssim(self.img1, self.img2, data_range=self.img2.max() - self.img2.min())
+        return self.SSIM
+
     def evaluateAll(self):
         self.euclidianDistance()
         self.getPSNR()
         self.getRMSE()
+        self.getSSIM()
         print("Euclidian distance = ", self.euclidianDist)
         print("PSNR = ", self.PSNR)
         print("RMSE = ", self.RMSE)
+        print("SSIM = ", self.SSIM)
         print('---------------------------------------------')
         return
 
