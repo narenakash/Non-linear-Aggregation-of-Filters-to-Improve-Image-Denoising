@@ -33,7 +33,7 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
             trainingData, testingData, line_points=100, info=False)
         print("machines")
         machines, _ = cobra_diagnostics.optimal_alpha(
-            trainingData, testingData, epsilon=Epsilon_opt, info=False)
+            trainingData, testingData, epsilon=epsilon, info=False)
 
         cobra = Cobra(epsilon=epsilon, machines=machines)
         print("fit")
@@ -46,7 +46,7 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
             y_k=testingData,
             y_l=testingData)
         for i, denoise in enumerate(denoisemethods):
-            cobra.load_machine(denoise, CobraMachine(denoise, i, patchSize))
+            cobra.load_machine(denoise, CobraMachine(denoise, patchSize))
         cobra.load_machine_predictions()
         # print("Predictions:", cobra.machine_predictions_)
 

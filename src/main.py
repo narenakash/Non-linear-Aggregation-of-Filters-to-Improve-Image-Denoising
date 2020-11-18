@@ -9,8 +9,8 @@ import os, pickle, matplotlib
 matplotlib.use('pdf')
 import matplotlib.pyplot as plt
 
-import warnings
-warnings.filterwarnings("ignore")
+#import warnings
+#warnings.filterwarnings("ignore")
 
 class saveModel:
     def __init__(self, model, alpha, eps):
@@ -65,9 +65,9 @@ if __name__ == "__main__":
     plt.clf()
 
     training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
-    patch = 1
+    patch = 31
     noisy = noisyImgs[-1]
-    loadModel = True
+    loadModel = False
     model  = None
     alpha = 0
     eps = 0
@@ -78,7 +78,7 @@ if __name__ == "__main__":
             eps = model.eps
             model = model.model
     else:
-        model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=False)
+        model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=True)
     tosave = saveModel(model, alpha, eps)
     with open('best.pkl', 'wb') as output:
         pickle.dump(tosave, output, pickle.HIGHEST_PROTOCOL)
