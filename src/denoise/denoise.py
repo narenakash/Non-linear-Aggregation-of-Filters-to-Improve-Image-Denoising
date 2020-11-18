@@ -49,7 +49,8 @@ class Denoise:
         return img
 
     def denoiseNAME(self, method):
-        return getattr(method, 'img', self.img)
+        ret = getattr(self, method)
+        return ret()
 
     def denoiseMethods(self):
         dm = ['median', 'gaussian', 'bilateral', 'NLmeans', 'TVchambolle', 
@@ -127,8 +128,11 @@ class Denoise:
         return cv2.imwrite(name + ext, self.img)
 
 if __name__ == "__main__":
-    img = cv2.imread('./nin_speckle:0.1_.png')
-    Denoise(img).median().write(name="median")
-    Denoise(img).richardson_lucy().write(name="rl")
-    Denoise(img).TVchambolle().write(name="tv")
-    Denoise(img).NLmeans().write(name="NLm")
+    img = cv2.imread('../../dataset/test/Aaron_Eckhart_0001.jpg')
+    x = Denoise(img)
+    ret = x.denoiseNAME('bilateral')
+    print(ret.shape)
+    # Denoise(img).median().write(name="median")
+    # Denoise(img).richardson_lucy().write(name="rl")
+    # Denoise(img).TVchambolle().write(name="tv")
+    # Denoise(img).NLmeans().write(name="NLm")
