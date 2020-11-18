@@ -8,13 +8,14 @@ from cobramachine import *
 
 def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
 
+    print("Making training data ready")
     trainingData, trainingData1, trainingData2, testingData = loadTrainingData(
         trainNames, noiseType, patchSize)
     denoisemethods = denoiseMethods()
     epsilon = 0.2
     machines = 4
     cobra = Cobra(epsilon=epsilon, machines=machines)
-
+    print("Training model")
     cobra.fit(trainingData, testingData)
 
     for i, denoise in enumerate(denoisemethods):
