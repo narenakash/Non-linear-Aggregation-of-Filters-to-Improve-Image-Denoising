@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     train_path = '../dataset/train/'
     train_names=[train_path+i for i in os.listdir(train_path)]
-    train_names = train_names[:1]
+    train_names = train_names[:5]
     print("Number of train images = " + str(len(train_names)))
 
     file_path = '../dataset/test/'
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     plt.clf()
 
     training_noise_kind = [ i for i in range(len(noisyImgs) - 2) ]
-    patch = 31
+    patch = 1
     noisy = noisyImgs[-1]
     loadModel = False
     model  = None
