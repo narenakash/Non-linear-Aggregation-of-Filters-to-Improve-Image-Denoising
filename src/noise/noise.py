@@ -22,6 +22,12 @@ class Noise:
         self.ext = ext
 
         self.originalImg = self.imread(img_path)
+        if(np.max(self.originalImg) != np.min(self.originalImg)):
+            self.originalImg = (self.originalImg - np.min(self.originalImg)) / (np.max(self.originalImg) - np.min(self.originalImg))
+        else:
+            self.originalImg = self.originalImg
+
+        # print(self.originalImg.min(), self.originalImg.max())
         self.saltImg = np.empty(self.originalImg.shape)
         self.pepperImg = np.empty(self.originalImg.shape)
         self.gaussianImg = np.empty(self.originalImg.shape)
@@ -62,7 +68,7 @@ class Noise:
         for i in range(h):
             for j in range(w):
                 if random() < prob:
-                    self.saltImg[i, j] = 255
+                    self.saltImg[i, j] = 1
 
         self.edits.append(f"salt:{prob}")
         return self.saltImg
@@ -87,9 +93,10 @@ class Noise:
         """
         sigma = var**0.5
         gauss = np.random.normal(mean,sigma,self.originalImg.shape)
-        gauss = gauss.reshape(self.originalImg.shape).astype(np.uint8)
-        self.gaussianImg = self.originalImg.copy()
-        self.gaussianImg = cv2.add(self.gaussianImg, gauss)
+        gauss = self.originalImg + gauss
+        if (np.max(gauss) != np.min(gauss)):
+            gauss = (gauss - np.min(gauss)) / (np.max(gauss) - np.min(gauss))
+        self.gaussianImg = gauss
 
         self.edits.append(f"gaussian:{var}")
         return self.gaussianImg
@@ -101,6 +108,8 @@ class Noise:
         noise = np.random.normal(mean, var**0.5, self.originalImg.shape)
         noisy = self.originalImg + self.originalImg * noise
         self.speckleImg = noisy
+        if (np.max(self.speckleImg) != np.min(self.speckleImg)):
+            self.speckleImg = (self.speckleImg - np.min(self.speckleImg)) / (np.max(self.speckleImg) - np.min(self.speckleImg))
         self.edits.append(f"speckle:{var}")
         return self.speckleImg
       
@@ -111,8 +120,8 @@ class Noise:
         poissonNoise = np.random.poisson(self.originalImg).astype(float)
         self.poissonImg = self.originalImg.astype('float') + poissonNoise
         self.poissonImg /= self.poissonImg.max()
-        self.poissonImg *= 255
-        self.poissonImg = np.rint(self.poissonImg).astype('uint8')
+        if (np.max(self.poissonImg)!=np.min(self.poissonImg)):
+            self.poissonImg = (self.poissonImg-np.min(self.poissonImg))/(np.max(self.poissonImg)-np.min(self.poissonImg))
         return self.poissonImg
 
     def patchSupression(self, patch_nb = 5, patch_size = 2):
@@ -140,12 +149,19 @@ class Noise:
     def getAllNoises(self):
         self.allNoises = []
         self.allNoises.append(self.salt())
+#        print(self.allNoises[-1].max())
         self.allNoises.append(self.pepper())
+#        print(self.allNoises[-1].max())
         self.allNoises.append(self.gaussian())
+#        print(self.allNoises[-1].max())
         self.allNoises.append(self.speckle())
+#        print(self.allNoises[-1].max())
         self.allNoises.append(self.poisson())
+#        print(self.allNoises[-1].max())
         self.allNoises.append(self.patchSupression())
+#        print(self.allNoises[-1].max())
         self.allNoises.append(self.multiNoise())
+#        print(self.allNoises[-1].max())
         return self.allNoises
 
     def multiNoise(self):
