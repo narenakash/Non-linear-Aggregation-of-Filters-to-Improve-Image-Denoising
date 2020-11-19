@@ -78,7 +78,7 @@ if __name__ == "__main__":
             eps = model.eps
             model = model.model
     else:
-        model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=True)
+        model, alpha, eps = cobraModelInit(train_names, training_noise_kind, noisy.shape, patchSize=patch, best=False)
     tosave = saveModel(model, alpha, eps)
     with open('best.pkl', 'wb') as output:
         pickle.dump(tosave, output, pickle.HIGHEST_PROTOCOL)
@@ -92,8 +92,10 @@ if __name__ == "__main__":
     plt.cla()
     plt.clf()
 
+    # print(im_denoise.max(), noise_class.originalImg.max())
     print("Evaluation...")
-    evaluate = denoiseEvaluation(im_denoise, noise_class.originalImg)
+    toS = im_denoise.astype('float') / 255.0
+    evaluate = denoiseEvaluation(toS, noise_class.originalImg)
     evaluate.evaluateAll()
     print("Saving the difference between denoised image and original one...")
     plt.imshow(evaluate.Idiff, cmap = plt.get_cmap('gray'))
