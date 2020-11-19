@@ -83,7 +83,7 @@ if __name__ == "__main__":
     with open('best.pkl', 'wb') as output:
         pickle.dump(tosave, output, pickle.HIGHEST_PROTOCOL)
 
-    Y = cobraDenoise(noisy, model,noise_class, alpha, p_size=patch)
+    Y = cobraDenoise(noisy, model,noise_class, alpha, patchSize=patch)
     im_denoise = np.array(Y).reshape(noisy.shape)
 
     print('Display of the cobra denoising result')
