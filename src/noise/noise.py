@@ -59,7 +59,7 @@ class Noise:
 
       return dm
 
-    def salt(self, prob=0.08):
+    def salt(self, prob=0.01):
         """
         Adds salt noise to the image
         """
@@ -73,7 +73,7 @@ class Noise:
         self.edits.append(f"salt:{prob}")
         return self.saltImg
 
-    def pepper(self, prob=0.08):
+    def pepper(self, prob=0.01):
         """
         Adds pepper noise to the image
         """
@@ -87,7 +87,7 @@ class Noise:
         self.edits.append(f"pepper:{prob}")
         return self.pepperImg
 
-    def gaussian(self, var = 0.1, mean = 0):
+    def gaussian(self, var = 0.003, mean = 0):
         """
         Adds gaussian noise to the image
         """
@@ -101,7 +101,7 @@ class Noise:
         self.edits.append(f"gaussian:{var}")
         return self.gaussianImg
 
-    def speckle(self, var=0.1, mean=0.0):
+    def speckle(self, var=0.005, mean=0.0):
         """
         Adds speckle noise to the image
         """
@@ -113,15 +113,17 @@ class Noise:
         self.edits.append(f"speckle:{var}")
         return self.speckleImg
       
-    def poisson(self, maxv = 0.2):
+    def poisson(self):
         """
         Adds poisson noise to the image
         """
-        poissonNoise = np.random.poisson(self.originalImg).astype(float)
-        self.poissonImg = self.originalImg.astype('float') + poissonNoise
-        self.poissonImg /= self.poissonImg.max()
-        if (np.max(self.poissonImg)!=np.min(self.poissonImg)):
-            self.poissonImg = (self.poissonImg-np.min(self.poissonImg))/(np.max(self.poissonImg)-np.min(self.poissonImg))
+        tmp = len(np.unique(self.originalImg))
+        tmp = 2 ** np.ceil(np.log2(tmp))
+        ret = np.random.poisson(self.originalImg*tmp)/float(tmp)
+        
+        if np.max(ret) != np.min(ret): 
+            ret = (ret-np.min(ret))/(np.max(ret)-np.min(ret))
+        self.poissonImg = ret
         return self.poissonImg
 
     def patchSupression(self, patch_nb = 5, patch_size = 2):
