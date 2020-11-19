@@ -28,6 +28,8 @@ python3 main.py
 ```
 Do note that the training process may take several hours. The team members used the Ada High Performance Cluster of IIIT Hyderabad for training the model.
 
+The link to the best model obtained upon training is [here](https://drive.google.com/drive/folders/1TrwRDwMP2HgtHFfrVahM5bbug3ctNWaF).
+
 ## Dependencies
 The following command will install the packages according to the configuration file `src/req.txt`.
 ```bash
