@@ -21,6 +21,9 @@ class Denoise:
     """
 
     def __init__(self, img):
+        self.img = img
+        self.img *= 255
+        self.img = np.rint(self.img)
         self.img = img.astype('uint8')
         self.ext = ".jpg"
         self.medianImg = np.empty(self.img.shape)
@@ -61,26 +64,31 @@ class Denoise:
     def median(self, k=5):
         self.medianImg = cv2.medianBlur(self.img, k)
 
+        self.medianImg = self.medianImg.astype('float') / 255.0
         return self.medianImg
 
     def gaussian(self, k=(5,5)):
         self.gaussianImg = cv2.GaussianBlur(self.img, k, 0) 
 
+        self.gaussianImg = self.gaussianImg.astype('float') / 255.0
         return self.gaussianImg
 
     def bilateral(self, k = 9, s1 = 75, s2 = 75):
         self.bilateralImg = cv2.bilateralFilter(self.img, k, s1, s2)
 
+        self.bilateralImg = self.bilateralImg.astype('float') / 255.0
         return self.bilateralImg
 
     def NLmeans(self, h = 10, tws = 7, sws = 21):
         self.NLmeansImg = cv2.fastNlMeansDenoising(self.img, None, h, tws ,sws) 
 
+        self.NLmeansImg = self.NLmeansImg.astype('float') / 255.0
         return self.NLmeansImg
 
     def TVchambolle(self):
         self.TVchambolleImg = skimage.restoration.denoise_tv_chambolle(self.img, multichannel=True)
 
+        self.TVchambolleImg = self.TVchambolleImg.astype('float') / 255.0
         return self.TVchambolleImg
 
     def richardson_lucy(self, point_spread_rl = 5):
@@ -89,12 +97,14 @@ class Denoise:
         self.richardson_lucyImg = self.richardson_lucyImg*255
         self.richardson_lucyImg = self.richardson_lucyImg.astype('uint8')
 
+        self.richardson_lucyImg = self.richardson_lucyImg.astype('float') / 255.0
         return self.richardson_lucyImg
 
     def inpaint(self):
         mask = (self.img == 255)
         self.inpaintImg = skimage.restoration.inpaint.inpaint_biharmonic(self.img, mask, multichannel=False)
 
+        self.inpaintImg = self.inpaintImg.astype('float') / 255.0
         return self.inpaintImg
 
     def getAllNoises(self):
