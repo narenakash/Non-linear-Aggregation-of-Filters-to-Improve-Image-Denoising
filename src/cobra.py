@@ -7,13 +7,16 @@ from pycobra.visualisation import Visualisation
 from cobramachine import *
 
 def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
-
+    """
+    Initalise and train cobra mode
+    
+    """
     print("Making training data ready")
     trainingData, trainingData1, trainingData2, testingData = loadTrainingData(
         trainNames, noiseType, patchSize)
     denoisemethods = denoiseMethods()
     epsilon = 0.2
-    machines = 4
+    machines = 3
     cobra = Cobra(epsilon=epsilon, machines=machines)
     print("Training model")
     cobra.fit(trainingData, testingData)
@@ -27,7 +30,7 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
     if best:
 
         print("Running Diagnostics")
-        cobra_diagnostics = Diagnostics(cobra, trainingData, testingData)
+        cobra_diagnostics = Diagnostics(cobra, trainingData, testingData, load_MSE=False)
         print("epsilon")
         epsilon, _ = cobra_diagnostics.optimal_epsilon(
             trainingData, testingData, line_points=100, info=False)
@@ -52,21 +55,29 @@ def cobraModelInit(trainNames, noiseType, imShape, patchSize=1, best=True):
 
     return cobra, machines, epsilon
 
-def cobraDenoise(noisy, model,noise_class, n_of_machines, p_size=1):
+def cobraDenoise(noisy, model,noise_class, machines, patchSize=1):
+    """
+    denoise an image based on cobra model
+    noisy: noisy image
+    model: trained cobra model
+    noise_class: Noise class of orginal image
+    machines: minimum no of machines that should satisfy:
+    patchSize: patch size of image to consider
+    """
     print("Image denoising...")
     testX = []
-    for x in range(p_size, noise_class.originalImg.shape[0]-p_size):
-      for y in range(p_size,noise_class.originalImg.shape[1]-p_size):
-        testX.append(getNeighbours(noisy, x, y, p_size))
+    for x in range(patchSize, noise_class.originalImg.shape[0]-patchSize):
+      for y in range(patchSize,noise_class.originalImg.shape[1]-patchSize):
+        testX.append(getNeighbours(noisy, x, y, patchSize))
     print("Dolty")
-    Y = model.predict(testX, n_of_machines)
+    Y = model.predict(testX, machines)
     print("Dolty2")
     # Padding image
-    if p_size:
+    if patchSize:
       Ytmp = noisy.copy()
-      for x in range(p_size, noise_class.originalImg.shape[0]-p_size) :
-        for y in range(p_size,noise_class.originalImg.shape[1]-p_size) : 
-          Ytmp[x,y] = Y[(x-p_size)*(noise_class.originalImg.shape[1]-2*p_size)+(y-p_size)]
+      for x in range(patchSize, noise_class.originalImg.shape[0]-patchSize) :
+        for y in range(patchSize,noise_class.originalImg.shape[1]-patchSize) : 
+          Ytmp[x,y] = Y[(x-patchSize)*(noise_class.originalImg.shape[1]-2*patchSize)+(y-patchSize)]
 
       Y = Ytmp.reshape(-1)
     return Y
