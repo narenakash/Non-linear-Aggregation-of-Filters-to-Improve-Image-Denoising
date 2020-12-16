@@ -105,10 +105,14 @@ The program takes 25 input noise-free images and adds seven standard noise model
 
 ## Team Members
 
-- [Amogh Tiwari](https://researchweb.iiit.ac.in/~amogh.tiwari/)
-- [Dolton Fernandes](https://doltonfernandes.github.io/)
-- [George Tom](https://georg3tom.github.io/)
-- [Naren Akash R J](https://researchweb.iiit.ac.in/~naren.akash/)
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/AmoghTiwari"><img src="https://avatars2.githubusercontent.com/u/40275901?s=460&u=7e197189daaf2500f890667cc748289351605cc2&v=4" width="100px;" alt=""/><br /><sub><b>Amogh Tiwari</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/doltonfernandes/"><img src="https://avatars1.githubusercontent.com/u/42113482?s=460&u=34e4c282db236d7adfbc6ff0176992cb973b426a&v=4" width="100px;" alt=""/><br /><sub><b>Dolton Fernandes</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/georg3tom"><img src="https://avatars0.githubusercontent.com/u/22193688?s=460&u=b4874125263dd8d3ba21a87e3f4f76d0fd0a825d&v=4" width="100px;" alt=""/><br /><sub><b>George Tom</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/narenakash"><img src="https://avatars3.githubusercontent.com/u/43748290?s=460&u=26bc998e91194730ff8d885ec34ee64690ec46c2&v=4" width="100px;" alt=""/><br /><sub><b>Naren Akash R J</b></sub></a><br /></td>
+  <tr>
+</table>
 
 All the team members are undergraduate research students at the [Center for Visual Information Technology, IIIT Hyderabad](http://cvit.iiit.ac.in/), India.
 
